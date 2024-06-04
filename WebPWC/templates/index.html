@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with GPT</title>
+</head>
+<body>
+    <h1>Chat with GPT</h1>
+    <div>
+        <textarea id="message" placeholder="Type your message here..."></textarea>
+    </div>
+    <div>
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    <div>
+        <h2>Response:</h2>
+        <p id="response"></p>
+    </div>
+    <script>
+        async function sendMessage() {
+            const message = document.getElementById('message').value;
+            const responseElement = document.getElementById('response');
+
+            const response = await fetch('http://localhost:8000/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                responseElement.textContent = data.response;
+            } else {
+                responseElement.textContent = 'Error: Failed to fetch response from the server.';
+            }
+        }
+    </script>
+</body>
+</html>
